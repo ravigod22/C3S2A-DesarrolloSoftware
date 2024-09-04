@@ -16,6 +16,8 @@ COPY . .
 # Expone el puerto en el que la aplicación correrá
 EXPOSE 3001
 
+#ENV PORT = 3001
+
 # Comando para iniciar la aplicación
-CMD ["node", "src/app.js"]
+CMD ["node", "src/server.js"]
 

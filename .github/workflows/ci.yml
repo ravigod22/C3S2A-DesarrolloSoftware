@@ -35,7 +35,7 @@ jobs:
       working-directory: Semana1/Actividad1/devops-practice
 
     - name: Run tests
-      run: docker exec devop-practice-container npm test
+      run: docker exec devops-practice-container npm test
     
     - name: Run Docker container
       run: |

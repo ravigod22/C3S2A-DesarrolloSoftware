@@ -7,3 +7,4 @@ services:
       - "3001:3001"
     environment:
       - NODE_ENV=production
+    container_name: devops-practice-container

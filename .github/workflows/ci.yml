@@ -24,12 +24,20 @@ jobs:
       run: npm install
       working-directory: Semana1/Actividad1/devops-practice
     
-    - name: Build Docker image
-      run: docker build -t devops-practice Semana1/Actividad1/devops-practice/.
+    - name: Check Docker and Docker Compose versions
+      run: |
+        docker --version
+        docker compose version 
+
+    - name: Build and run Docker Compose
+      run: |
+        docker compose up --build -d
+      working-directory: Semana1/Actividad1/devops-practice
 
     - name: Run tests
-      run: npm test
-      working-directory: Semana1/Actividad1/devops-practice
+      run: docker exec devop-practice-container npm test
     
     - name: Run Docker container
-      run: docker run -d -p 3001:3001 devops-practice
+      run: |
+        docker compose down
+      working-directory: Semana1/Actividad1/devops-practice

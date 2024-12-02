@@ -1,0 +1,1 @@
+{"virtualbox":{"/home/vagrant/.ssh":{"owner":"vagrant","group":"vagrant","guestpath":"/home/vagrant/.ssh","hostpath":"/home/jose/.ssh","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"/home/jose/Desktop/C3S2A-DesarrolloSoftware/ActividadIAC","disabled":false,"__vagrantfile":true}}}

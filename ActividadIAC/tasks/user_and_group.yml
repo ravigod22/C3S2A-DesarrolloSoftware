@@ -1,0 +1,55 @@
+---
+- name: Actualizar la lista de paquetes
+  apt:
+    update_cache: yes
+
+- name: Instalar pip si no está disponible
+  apt:
+    name: python3-pip
+    state: present
+
+- name: Actualizar pip a la última versión
+  command: python3 -m pip install --upgrade pip
+  args:
+    creates: /usr/local/lib/python3.8/dist-packages/pip
+
+- name: Instalar passlib usando el interpreter de python
+  pip:
+    name: passlib
+    executable: /usr/bin/pip3
+
+- name: Verificar que passlib está instalado
+  command: python3 -c "import passlib"
+  changed_when: false
+  failed_when: false
+
+- name: Asegurar que el grupo 'desarrolladores' exista
+  group:
+    name: desarrolladores
+    state: present
+
+- name: Crear el usuario 'bender'
+  user:
+    name: bender
+    shell: /bin/bash
+    password: "{{ 'ravigod22' | password_hash('sha512') }}"
+
+- name: Asignar 'bender' al grupo 'desarrolladores'
+  user:
+    name: bender
+    groups: desarrolladores
+    append: yes
+
+- name: Crear un directorio llamado 'ingenieria'
+  file:
+    path: /opt/ingenieria
+    state: directory
+    mode: '0750'
+    group: desarrolladores
+
+- name: Crear un archivo en el directorio de 'ingenieria'
+  file:
+    path: /opt/ingenieria/privado.txt
+    state: touch
+    mode: '0770'
+    group: desarrolladores

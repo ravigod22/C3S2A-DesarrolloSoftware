@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  product_catalog:
+    build:
+      context: ./product_catalog
+      dockerfile: .devcontainer/Dockerfile
+    container_name: product_catalog_container
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./product_catalog:/project
+    environment:
+      - ENV_VAR=example_value
+
+  user_management:
+    build:
+      context: ./user_management
+      dockerfile: .devcontainer/Dockerfile
+    container_name: user_management_container
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./user_management:/project
+    environment:
+      - ENV_VAR=example_value

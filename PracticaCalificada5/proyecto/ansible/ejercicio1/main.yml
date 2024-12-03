@@ -1,0 +1,62 @@
+---
+- name: Actualizar la lista de paquetes
+  apt:
+    update_cache: yes
+    name:
+      - git
+      - curl
+    state: present
+
+- name: Configurar zona horaria
+  timezone:
+    name: "America/Lima"
+
+- name: Configurar locales
+  locale_gen:
+    name: "es_PE.UTF-8"
+    state: present  
+
+- name: Establecer el local prederterminado del sistema
+  command: update-locale LANG=es_PE.UTF-8 LC_ALL=es_PE.UTF-8
+
+- name: Instalar pip si no esta disponible
+  apt:
+    name: python3-pip
+    state: present
+
+- name: Actualizar pip a la última versión
+  command: python3 -m pip install --upgrade pip
+  args:
+    creates: /usr/local/lib/python3.8/dist-packages/pip
+
+- name: Instalar passlib usando el interpreter de python
+  pip:
+    name: passlib
+    executable: /usr/bin/pip3
+
+- name: Verificar que passlib está instalado
+  command: python3 -c "import passlib"
+  changed_when: false
+  failed_when: false
+
+- name: Crear el grupo admin
+  group:
+    name: admin
+    state: present
+
+- name: Asegurar que el grupo 'admin' exista
+  group:
+    name: admin
+    state: present
+
+- name: Crear un usuario devuser
+  user:
+    name: devuser
+    shell: /bin/bash
+    password: "{{ 'ravigod22' | password_hash('sha512') }}"
+
+- name: Asignar 'devuser' al grupo 'admin'
+  user:
+    name: devuser
+    groups: admin
+    append: yes

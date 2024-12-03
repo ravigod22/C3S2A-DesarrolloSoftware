@@ -1,0 +1,49 @@
+---
+- name: Instalar nginx
+  apt:
+    name: nginx
+    state: latest
+    update_cache: yes
+
+- name: Verificar si ya existen los certificados SSL
+  stat:
+    path: /etc/ssl/private/nginx-selfsigned.key
+  register: ssl_cert
+
+- name: Generar los certificados SSL
+  command: >
+    openssl req -x509 -nodes -days 365
+    -newkey rsa:2048
+    -keyout /etc/ssl/private/nginx-selfsigned.key
+    -out /etc/ssl/certs/nginx-selfsigned.crt
+    -subj "/C=PE/ST=Lima/L=Lima/O=ProyectoPC5/CN=localhost"
+  when: not ssl_cert.stat.exists
+
+
+- name: Configuracion de nginx para SSL
+  template:
+    src: ../../templates/nginx_ssl.j2
+    dest: /etc/nginx/sites-available/default
+  notify:
+    - Reiniciar nginx
+  
+- name: Habilitar y configurar firewall
+  block:
+    - name: Trafico SSH
+      ufw:
+        rule: allow
+        port: 22
+        proto: tcp
+    - name: Trafico HTTP
+      ufw:
+        rule: allow
+        port: 80
+        proto: tcp
+    - name: Trafico HTTPS
+      ufw:
+        rule: allow
+        port: 443
+        proto: tcp
+    - name: Habilitar ufw
+      ufw:
+        state: enabled

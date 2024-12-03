@@ -14,21 +14,24 @@ Vagrant.configure("2") do |config|
   # boxes at https://vagrantcloud.com/search.
   config.vm.box = "ubuntu/focal64"
 
-  config.vm.network "private_network", ip: "192.168.56.102"
+  config.vm.network "private_network", ip: "192.168.56.101"
 
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = "1024"
-    vb.name = "vm_iac"
+    vb.memory = "2048"
+    vb.name = "vm_proyecto"
   end
+
+  # config.vm.provision "ansible" do |ansible|
+  #  ansible.playbook = "playbook.yml"
+  # end
 
   config.vm.provision "ansible_local" do |ansible|
     ansible.playbook = "site.yml"
     ansible.compatibility_mode = "2.0"
   end
 
-  config.vm.synced_folder "~/.ssh", "/home/vagrant/.ssh", owner: "vagrant", group: "vagrant"
-
-
+  # config.vm.synced_folder "~/.ssh", "/home/vagrant/.ssh", owner: "vagrant", group: "vagrant"
+  
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.

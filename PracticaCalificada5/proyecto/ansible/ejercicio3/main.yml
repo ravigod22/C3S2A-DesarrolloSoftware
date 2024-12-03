@@ -1,0 +1,11 @@
+---
+
+- name: Instalar Flask y Gunicorn
+  pip:
+    name: flask
+    state: present
+
+- name: Instalar Gunicorn
+  pip:
+    name: gunicorn
+    state: present

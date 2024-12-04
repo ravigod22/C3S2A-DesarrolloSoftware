@@ -22,7 +22,7 @@
 
 - name: Configuracion de nginx para SSL
   template:
-    src: ../../templates/nginx_ssl.j2
+    src: ../../templates/nginxSSL.j2
     dest: /etc/nginx/sites-available/default
   notify:
     - Reiniciar nginx

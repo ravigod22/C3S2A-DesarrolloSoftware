@@ -1,11 +1,60 @@
 ---
-
-- name: Instalar Flask y Gunicorn
+- name: Instalar Flask
   pip:
     name: flask
-    state: present
+    executable: /usr/local/bin/pip3
+    extra_args: --ignore-installed
 
 - name: Instalar Gunicorn
   pip:
     name: gunicorn
-    state: present
+    executable: /usr/local/bin/pip3
+    extra_args: --ignore-installed
+
+- name: Crear directorio para Flask
+  file:
+    path: /var/www/flaskApp
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '0755'
+  
+- name: Copiar plantilla de Flask
+  template:
+    src: ../../templates/flaskApp.py.j2
+    dest: /var/www/flaskApp/app.py
+    owner: www-data
+    group: www-data
+    mode: '0644'
+  
+- name: servicio systemd en puerto 6001
+  template:
+    src: ../../templates/flaskApp6001.service.j2
+    dest: /etc/systemd/system/flaskApp6001.service
+
+- name: servicio systemd en puerto 6002
+  template:
+    src: ../../templates/flaskApp6002.service.j2
+    dest: /etc/systemd/system/flaskApp6002.service
+
+- name: recargar systemd
+  command: systemctl daemon-reload
+
+- name: Arrancar servicio en puerto 6001
+  systemd:
+    name: flaskApp6001
+    enabled: yes
+    state: started
+ 
+- name: Arrancar servicio en puerto 6002
+  systemd:
+    name: flaskApp6002
+    enabled: yes
+    state: started
+
+- name: balanceador de carga
+  template:
+    src: ../../templates/nginxBalancer.j2
+    dest: /etc/nginx/sites-available/default
+  notify:
+    - Reiniciar nginx

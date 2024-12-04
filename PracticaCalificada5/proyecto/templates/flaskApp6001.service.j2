@@ -1,0 +1,12 @@
+[Unit]
+Description=Flask App en puerto 6001
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/flaskApp
+ExecStart=/usr/local/bin/gunicorn -w 2 -b 0.0.0.0:6001 app:app
+
+[Install]
+WantedBy=multi-user.target

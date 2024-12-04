@@ -1,0 +1,85 @@
+- name: Crear directorio para Prometheus
+  file:
+    path: /etc/prometheus
+    state: directory
+  
+- name: Instalar Prometheus
+  get_url:
+    url: https://github.com/prometheus/prometheus/releases/download/v2.47.0/prometheus-2.47.0.linux-amd64.tar.gz
+    dest: /tmp/prometheus.tar.gz
+
+- name: Extraer Prometheus
+  unarchive:
+    src: /tmp/prometheus.tar.gz
+    dest: /opt
+    remote_src: yes
+
+- name: Crear usuario y grupo prometheus
+  user:
+    name: prometheus
+    shell: /usr/sbin/nologin
+    system: yes
+    create_home: no
+
+- name: Configurar Prometheus para el proyecto
+  template:
+    src: ../../templates/prometheus.service.j2
+    dest: /etc/systemd/system/prometheus.service
+
+- name: Establecer permisos para Prometheus
+  file:
+    path: /opt/prometheus-2.47.0.linux-amd64
+    state: directory
+    owner: prometheus
+    group: prometheus
+    recurse: yes
+
+- name: Instalaar Node-Exporter
+  get_url:
+    url: https://github.com/prometheus/node_exporter/releases/download/v1.6.1/node_exporter-1.6.1.linux-amd64.tar.gz
+    dest: /tmp/node_exporter.tar.gz
+
+- name: Extraer Node-Exporter
+  unarchive:
+    src: /tmp/node_exporter.tar.gz
+    dest: /opt
+    remote_src: yes
+
+- name: Servicio de Node-Exporter
+  template:
+    src: ../../templates/node_exporter.service.j2
+    dest: /etc/systemd/system/node_exporter.service
+
+- name: Instalar dependencias para utilizar Grafana
+  apt:
+    name:
+      - apt-transport-https
+      - software-properties-common
+    state: present
+
+- name: Agregar repositorio de Grafana
+  shell: |
+    echo "deb https://packages.grafana.com/oss/deb stable main" > /etc/apt/sources.list.d/grafana.list
+    wget -q -O - https://packages.grafana.com/gpg.key | apt-key add -
+  args:
+    creates: /etc/apt/sources.list.d/grafana.list
+
+- name: Configurar Prometheus
+  template:
+    src: ../../templates/alerts.yml.j2
+    dest: /etc/prometheus/alerts.yml
+
+- name: Recargar servicios
+  command: systemctl daemon-reload
+
+- name: Levantar Prometheus
+  systemd:
+    name: prometheus
+    enabled: yes
+    state: started
+
+- name: Levantar Node-Exporter
+  systemd:
+    name: node_exporter
+    enabled: yes
+    state: started

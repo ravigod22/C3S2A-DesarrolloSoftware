@@ -1,4 +1,11 @@
 # Practica Calificada 5
+
+## Informacion
+**Alumno**: Jose Manuel Ravichagua Marin  
+**Codigo**: 20210086C  
+**Curso**: CC3S2 Desarrollo de Software  
+**Profesor**: Cesar Lara
+
 ## Objetivo
 
 Completar los ejercicios avanzados utilizando **Ansible**, **Vagrant** y **Docker**, siguiendo buenas prácticas de desarrollo y automatización. Deberás estructurar tu proyecto de manera organizada, utilizar control de versiones con **Git** y compartir tu trabajo a través de un repositorio en **GitHub**. Además, prepararás un archivo comprimido con todo el código y documentación necesaria.
@@ -27,7 +34,7 @@ Completar los ejercicios avanzados utilizando **Ansible**, **Vagrant** y **Docke
     - Instalar **Vagrant**
 - Creamos un directorio proyecto, e inicializamos nuestro `Vagrantfile` con el siguiente comando:  
     - `vagrant init ubuntu/focal64`  
-- Configuramos aquel **Vagranfile**, con una configuracion basica para levantar la maquina virtual.
+- Configuramos aquel **Vagranfile**, con una configuracion basica para levantar la maquina virtual.  
 ![Configuracion basica](docs/Photos/ConfigVagrantfile.png)
 
 - Creacion de un archivo `site.yml`, donde realizaremos las tareas de una forma estructurada y con buenas practicas de codigo.
@@ -42,6 +49,7 @@ Completar los ejercicios avanzados utilizando **Ansible**, **Vagrant** y **Docke
 - Si deseas liberar recursos de la maquina virtual:
     - `vagrant destroy`
 
+![](docs/Photos/CreacionVM.png)
 ## Desarrollo de los ejercicios
 
 ### Ejercicio 1: Configuracion basica del sistema
@@ -110,3 +118,9 @@ Completar los ejercicios avanzados utilizando **Ansible**, **Vagrant** y **Docke
     ![](docs/Photos/TemplateNodeExporter.png)
     - **Alerta Prometheus**
     ![](docs/Photos/PrometheusAlert.png)
+
+### Resultado y Conclusiones:
+- Avance de las tareas dadas por los ejercicios aun no concluidas pero con un avance del 25%.
+- Se realizo las implementacion sin mostrar los resultados
+- Resultado parcial de las tareas proporcionadas en el playbook **site.yml**
+![](docs/Photos/ResultadoParcial.png)
